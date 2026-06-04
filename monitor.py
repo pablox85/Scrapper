@@ -5,6 +5,7 @@ from pathlib import Path
 import requests
 from bs4 import BeautifulSoup
 
+#forcepush
 
 URL = "https://acredita.anep.edu.uy/acreditaEMS.html"
 STATE_FILE = Path("page_state.txt")
