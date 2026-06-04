@@ -7,6 +7,7 @@ on:
   schedule:
     - cron: "*/5 * * * *"
     - cron: "0 11 * * *"
+    - cron: "0 18-23 4 6 *"
   workflow_dispatch:
     inputs:
       mode:
@@ -47,8 +48,15 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             MODE="${{ github.event.inputs.mode }}"
-          elif [ "${{ github.event_name }}" = "schedule" ] && [ "${{ github.event.schedule }}" = "0 11 * * *" ]; then
-            MODE="heartbeat"
+          elif [ "${{ github.event_name }}" = "schedule" ]; then
+            case "${{ github.event.schedule }}" in
+              "0 11 * * *"|"0 18-23 4 6 *")
+                MODE="heartbeat"
+                ;;
+              *)
+                MODE="check"
+                ;;
+            esac
           else
             MODE="check"
           fi
