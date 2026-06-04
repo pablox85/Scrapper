@@ -68,6 +68,14 @@ Envía:
 ✅ Prueba manual de Telegram desde GitHub Actions.
 ```
 
+Prueba completa forzando un cambio:
+
+```bash
+python monitor.py force-change
+```
+
+Este modo sobrescribe temporalmente `page_state.txt` con un valor ficticio, valida que la comparación detecte un cambio, envía una alerta de prueba por Telegram y restaura el estado real al finalizar.
+
 ## Mensajes
 
 Cambio detectado:

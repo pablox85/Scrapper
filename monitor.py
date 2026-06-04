@@ -26,6 +26,18 @@ H1 actual:
 
 TEST_MESSAGE = "✅ Prueba manual de Telegram desde GitHub Actions."
 
+FORCE_CHANGE_MESSAGE = """⚠️ PRUEBA DE ALERTA
+
+Cambio detectado correctamente.
+
+H1 actual:
+{h1}
+
+URL:
+{url}"""
+
+FORCED_STATE = b"__forced_acredita_monitor_state_for_integration_test__"
+
 
 class MonitorError(Exception):
     pass
@@ -164,6 +176,35 @@ def run_test() -> int:
     return 0
 
 
+def run_force_change() -> int:
+    original_state_exists = STATE_FILE.exists()
+    original_state = STATE_FILE.read_bytes() if original_state_exists else None
+
+    print("Cambio forzado para prueba")
+
+    try:
+        STATE_FILE.write_bytes(FORCED_STATE)
+
+        html_text, html_bytes = fetch_page()
+        page = parse_page(html_text)
+        previous_html = STATE_FILE.read_bytes()
+
+        print(f"Página consultada correctamente: {URL}")
+        print(f"H1 actual: {page['h1']}")
+
+        if previous_html == html_bytes:
+            raise MonitorError("No se pudo forzar el cambio: el estado ficticio coincide.")
+
+        enviar_telegram(FORCE_CHANGE_MESSAGE.format(h1=page["h1"], url=URL))
+        print("Telegram OK")
+        return 0
+    finally:
+        if original_state_exists:
+            STATE_FILE.write_bytes(original_state)
+        else:
+            STATE_FILE.unlink(missing_ok=True)
+
+
 def main() -> int:
     mode = sys.argv[1] if len(sys.argv) > 1 else "check"
 
@@ -174,8 +215,10 @@ def main() -> int:
             return run_heartbeat()
         if mode == "test":
             return run_test()
+        if mode == "force-change":
+            return run_force_change()
 
-        print("Uso: python monitor.py [check|heartbeat|test]", file=sys.stderr)
+        print("Uso: python monitor.py [check|heartbeat|test|force-change]", file=sys.stderr)
         return 2
     except TelegramError as exc:
         print(f"Fallo de Telegram: {exc}", file=sys.stderr)

@@ -15,6 +15,7 @@ on:
           - check
           - heartbeat
           - test
+          - force-change
 
 permissions:
   contents: write
