@@ -24,7 +24,7 @@ La página responde correctamente.
 H1 actual:
 {h1}"""
 
-TEST_MESSAGE = "✅ Acredita Monitor funcionando correctamente."
+TEST_MESSAGE = "✅ Prueba manual de Telegram desde GitHub Actions."
 
 
 class MonitorError(Exception):
@@ -160,7 +160,7 @@ def run_heartbeat() -> int:
 
 def run_test() -> int:
     enviar_telegram(TEST_MESSAGE)
-    print("Mensaje de prueba enviado correctamente.")
+    print("Telegram respondió OK. Mensaje de prueba enviado correctamente.")
     return 0
 
 

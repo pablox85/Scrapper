@@ -65,7 +65,7 @@ python monitor.py test
 Envía:
 
 ```text
-✅ Acredita Monitor funcionando correctamente.
+✅ Prueba manual de Telegram desde GitHub Actions.
 ```
 
 ## Mensajes
