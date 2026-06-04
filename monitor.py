@@ -24,6 +24,8 @@ La página responde correctamente.
 H1 actual:
 {h1}"""
 
+TEST_MESSAGE = "✅ Acredita Monitor funcionando correctamente."
+
 
 class MonitorError(Exception):
     pass
@@ -84,7 +86,7 @@ def extract_registration_h1(soup: BeautifulSoup) -> str:
     return "No se encontró H1 de inscripción."
 
 
-def send_telegram(message: str) -> None:
+def enviar_telegram(mensaje: str) -> None:
     token = os.getenv("TELEGRAM_BOT_TOKEN")
     chat_id = os.getenv("TELEGRAM_CHAT_ID")
 
@@ -96,7 +98,7 @@ def send_telegram(message: str) -> None:
     endpoint = f"https://api.telegram.org/bot{token}/sendMessage"
     payload = {
         "chat_id": chat_id,
-        "text": message,
+        "text": mensaje,
         "disable_web_page_preview": True,
     }
 
@@ -111,6 +113,14 @@ def send_telegram(message: str) -> None:
         raise TelegramError(
             f"Telegram respondió HTTP {response.status_code}: {response.text}"
         )
+
+    try:
+        body = response.json()
+    except ValueError as exc:
+        raise TelegramError(f"Telegram respondió JSON inválido: {response.text}") from exc
+
+    if not body.get("ok"):
+        raise TelegramError(f"Telegram respondió error: {body}")
 
 
 def run_check() -> int:
@@ -133,7 +143,7 @@ def run_check() -> int:
         print("Sin cambios. No se envía alerta.")
         return 0
 
-    send_telegram(CHANGE_MESSAGE.format(h1=page["h1"], url=URL))
+    enviar_telegram(CHANGE_MESSAGE.format(h1=page["h1"], url=URL))
     STATE_FILE.write_bytes(html_bytes)
     print("Cambio detectado. Alerta enviada y estado actualizado.")
     return 0
@@ -142,9 +152,15 @@ def run_check() -> int:
 def run_heartbeat() -> int:
     html_text, _ = fetch_page()
     page = parse_page(html_text)
-    send_telegram(HEARTBEAT_MESSAGE.format(h1=page["h1"]))
+    enviar_telegram(HEARTBEAT_MESSAGE.format(h1=page["h1"]))
     print("Heartbeat enviado correctamente.")
     print(f"H1 actual: {page['h1']}")
+    return 0
+
+
+def run_test() -> int:
+    enviar_telegram(TEST_MESSAGE)
+    print("Mensaje de prueba enviado correctamente.")
     return 0
 
 
@@ -156,8 +172,10 @@ def main() -> int:
             return run_check()
         if mode == "heartbeat":
             return run_heartbeat()
+        if mode == "test":
+            return run_test()
 
-        print("Uso: python monitor.py [check|heartbeat]", file=sys.stderr)
+        print("Uso: python monitor.py [check|heartbeat|test]", file=sys.stderr)
         return 2
     except TelegramError as exc:
         print(f"Fallo de Telegram: {exc}", file=sys.stderr)

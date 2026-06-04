@@ -56,6 +56,18 @@ python monitor.py heartbeat
 
 Este modo valida que la página responde correctamente y siempre envía un mensaje diario por Telegram.
 
+Modo de prueba de Telegram:
+
+```bash
+python monitor.py test
+```
+
+Envía:
+
+```text
+✅ Acredita Monitor funcionando correctamente.
+```
+
 ## Mensajes
 
 Cambio detectado:
