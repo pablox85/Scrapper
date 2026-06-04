@@ -14,8 +14,8 @@ on:
         options:
           - check
           - heartbeat
-          - test
           - force-change
+          - test
 
 permissions:
   contents: write
@@ -41,12 +41,15 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          if [ "${{ github.event_name }}" = "schedule" ] && [ "${{ github.event.schedule }}" = "0 11 * * *" ]; then
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            MODE="${{ github.event.inputs.mode }}"
+          elif [ "${{ github.event_name }}" = "schedule" ] && [ "${{ github.event.schedule }}" = "0 11 * * *" ]; then
             MODE="heartbeat"
           else
-            MODE="${{ github.event.inputs.mode || 'check' }}"
+            MODE="check"
           fi
 
+          echo "Modo ejecutado: $MODE"
           python monitor.py "$MODE"
 
       - name: Commit updated page state
