@@ -1,13 +1,9 @@
 name: Acredita Monitor
-##forcepush
+
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 on:
-  schedule:
-    - cron: "*/5 * * * *"
-    - cron: "0 11 * * *"
-    - cron: "5/5 19-23 4 6 *"
   workflow_dispatch:
     inputs:
       mode:
@@ -46,21 +42,7 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            MODE="${{ github.event.inputs.mode }}"
-          elif [ "${{ github.event_name }}" = "schedule" ]; then
-            case "${{ github.event.schedule }}" in
-              "0 11 * * *"|"5/5 19-23 4 6 *")
-                MODE="heartbeat"
-                ;;
-              *)
-                MODE="check"
-                ;;
-            esac
-          else
-            MODE="check"
-          fi
-
+          MODE="${{ github.event.inputs.mode }}"
           echo "Modo ejecutado: $MODE"
           python monitor.py "$MODE"
 
@@ -69,6 +51,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
           if [ ! -f page_state.txt ]; then
             echo "page_state.txt does not exist. Nothing to commit."
             exit 0
