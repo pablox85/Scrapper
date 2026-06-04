@@ -76,6 +76,14 @@ python monitor.py force-change
 
 Este modo sobrescribe temporalmente `page_state.txt` con un valor ficticio, valida que la comparación detecte un cambio, envía una alerta de prueba por Telegram y restaura el estado real al finalizar.
 
+Procesar comandos de Telegram:
+
+```bash
+python monitor.py telegram-commands
+```
+
+Si el bot recibe `/test`, responde siempre al chat que lo envió con el H1 actual, si hubo cambios o no, la URL, el tamaño del HTML y los caracteres de texto visible. Este comando no actualiza `page_state.txt` ni dispara una alerta automática aparte.
+
 ## Mensajes
 
 Cambio detectado:

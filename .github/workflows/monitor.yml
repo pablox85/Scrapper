@@ -16,6 +16,7 @@ on:
           - heartbeat
           - force-change
           - test
+          - telegram-commands
 
 permissions:
   contents: write

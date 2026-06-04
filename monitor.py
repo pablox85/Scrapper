@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 
 URL = "https://acredita.anep.edu.uy/acreditaEMS.html"
 STATE_FILE = Path("page_state.txt")
+TELEGRAM_OFFSET_FILE = Path("telegram_offset.txt")
 TIMEOUT_SECONDS = 20
 
 CHANGE_MESSAGE = """⚠️ Cambió la página de Acredita EMS.
@@ -98,28 +99,20 @@ def extract_registration_h1(soup: BeautifulSoup) -> str:
     return "No se encontró H1 de inscripción."
 
 
-def enviar_telegram(mensaje: str) -> None:
+def telegram_post(method: str, payload: dict) -> dict:
     token = os.getenv("TELEGRAM_BOT_TOKEN")
-    chat_id = os.getenv("TELEGRAM_CHAT_ID")
 
-    if not token or not chat_id:
-        raise TelegramError(
-            "Faltan TELEGRAM_BOT_TOKEN y/o TELEGRAM_CHAT_ID en variables de entorno."
-        )
+    if not token:
+        raise TelegramError("Falta TELEGRAM_BOT_TOKEN en variables de entorno.")
 
-    endpoint = f"https://api.telegram.org/bot{token}/sendMessage"
-    payload = {
-        "chat_id": chat_id,
-        "text": mensaje,
-        "disable_web_page_preview": True,
-    }
+    endpoint = f"https://api.telegram.org/bot{token}/{method}"
 
     try:
         response = requests.post(endpoint, data=payload, timeout=TIMEOUT_SECONDS)
     except requests.Timeout as exc:
-        raise TelegramError("Timeout al enviar mensaje por Telegram.") from exc
+        raise TelegramError(f"Timeout al llamar Telegram {method}.") from exc
     except requests.RequestException as exc:
-        raise TelegramError(f"Error de red al enviar Telegram: {exc}") from exc
+        raise TelegramError(f"Error de red al llamar Telegram {method}: {exc}") from exc
 
     if not 200 <= response.status_code < 300:
         raise TelegramError(
@@ -133,6 +126,85 @@ def enviar_telegram(mensaje: str) -> None:
 
     if not body.get("ok"):
         raise TelegramError(f"Telegram respondió error: {body}")
+
+    return body
+
+
+def enviar_telegram(mensaje: str, chat_id: str | int | None = None) -> None:
+    target_chat_id = chat_id or os.getenv("TELEGRAM_CHAT_ID")
+
+    if not target_chat_id:
+        raise TelegramError("Falta TELEGRAM_CHAT_ID en variables de entorno.")
+
+    telegram_post(
+        "sendMessage",
+        {
+            "chat_id": target_chat_id,
+            "text": mensaje,
+            "disable_web_page_preview": True,
+        },
+    )
+
+
+def get_telegram_updates(offset: int | None = None) -> list[dict]:
+    payload = {
+        "timeout": 0,
+        "allowed_updates": '["message"]',
+    }
+
+    if offset is not None:
+        payload["offset"] = offset
+
+    body = telegram_post("getUpdates", payload)
+    return body.get("result", [])
+
+
+def read_telegram_offset() -> int | None:
+    if not TELEGRAM_OFFSET_FILE.exists():
+        return None
+
+    value = TELEGRAM_OFFSET_FILE.read_text(encoding="utf-8").strip()
+    if not value:
+        return None
+
+    try:
+        return int(value)
+    except ValueError as exc:
+        raise MonitorError(f"Offset de Telegram inválido en {TELEGRAM_OFFSET_FILE}.") from exc
+
+
+def write_telegram_offset(offset: int) -> None:
+    TELEGRAM_OFFSET_FILE.write_text(str(offset), encoding="utf-8")
+
+
+def build_telegram_test_response() -> str:
+    html_text, html_bytes = fetch_page()
+    page = parse_page(html_text)
+    previous_html = STATE_FILE.read_bytes() if STATE_FILE.exists() else b""
+    changed = previous_html != html_bytes
+    status = "⚠️ La página fue modificada" if changed else "Sin cambios detectados"
+
+    return f"""✅ Test manual Acredita EMS
+
+H1 actual:
+{page["h1"]}
+
+Estado:
+{status}
+
+Texto visible:
+{len(page["visible_text"])} caracteres
+
+HTML:
+{len(html_bytes)} bytes
+
+URL:
+{URL}"""
+
+
+def is_test_command(text: str) -> bool:
+    command = text.strip().split()[0].lower()
+    return command == "/test" or command.startswith("/test@")
 
 
 def run_check() -> int:
@@ -205,6 +277,54 @@ def run_force_change() -> int:
             STATE_FILE.unlink(missing_ok=True)
 
 
+def run_telegram_commands() -> int:
+    offset = read_telegram_offset()
+    updates = get_telegram_updates(offset)
+
+    if not updates:
+        print("No hay comandos nuevos de Telegram.")
+        return 0
+
+    next_offset = offset
+
+    for update in updates:
+        update_id = update.get("update_id")
+        if isinstance(update_id, int):
+            next_offset = max(next_offset or 0, update_id + 1)
+
+        message = update.get("message") or {}
+        text = message.get("text") or ""
+        chat = message.get("chat") or {}
+        chat_id = chat.get("id")
+
+        if not text or not chat_id:
+            continue
+
+        if not is_test_command(text):
+            continue
+
+        try:
+            response_message = build_telegram_test_response()
+        except MonitorError as exc:
+            response_message = f"""❌ Test manual Acredita EMS
+
+Error:
+{exc}
+
+URL:
+{URL}"""
+
+        enviar_telegram(response_message, chat_id=chat_id)
+        print(f"Comando /test respondido. Chat ID: {chat_id}")
+
+    if next_offset is not None:
+        write_telegram_offset(next_offset)
+        get_telegram_updates(next_offset)
+        print(f"Offset de Telegram actualizado: {next_offset}")
+
+    return 0
+
+
 def main() -> int:
     mode = sys.argv[1] if len(sys.argv) > 1 else "check"
 
@@ -217,8 +337,13 @@ def main() -> int:
             return run_test()
         if mode == "force-change":
             return run_force_change()
+        if mode == "telegram-commands":
+            return run_telegram_commands()
 
-        print("Uso: python monitor.py [check|heartbeat|test|force-change]", file=sys.stderr)
+        print(
+            "Uso: python monitor.py [check|heartbeat|test|force-change|telegram-commands]",
+            file=sys.stderr,
+        )
         return 2
     except TelegramError as exc:
         print(f"Fallo de Telegram: {exc}", file=sys.stderr)
