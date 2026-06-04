@@ -1,0 +1,69 @@
+name: Acredita Monitor
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+    - cron: "0 11 * * *"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Modo de ejecución"
+        required: true
+        default: "check"
+        type: choice
+        options:
+          - check
+          - heartbeat
+
+permissions:
+  contents: write
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run monitor
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "${{ github.event.schedule }}" = "0 11 * * *" ]; then
+            MODE="heartbeat"
+          else
+            MODE="${{ github.event.inputs.mode || 'check' }}"
+          fi
+
+          python monitor.py "$MODE"
+
+      - name: Commit updated page state
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ ! -f page_state.txt ]; then
+            echo "page_state.txt does not exist. Nothing to commit."
+            exit 0
+          fi
+
+          git add page_state.txt
+
+          if git diff --cached --quiet; then
+            echo "No state changes to commit."
+            exit 0
+          fi
+
+          git commit -m "Update Acredita page state"
+          git pull --rebase
+          git push
