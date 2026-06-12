@@ -35,7 +35,7 @@
 
 
 
-    <link rel="stylesheet" href="css/responsive.css">  
+    <link rel="stylesheet" href="css/responsive.css??20260611">  
 </head>
 <body>
     <div class="navbar-top navbar-dark pe-3 bg-primary d-lg-block d-none text-white">
@@ -51,19 +51,19 @@
     <nav class="navbar navbar-dark navbar-expand-lg bg-primary">
         <div class="container px-0">
             <a class="navbar-brand" href="index.html">
-                <img src="img/logo_anep.svg" class="logo" alt="Logo Anep" />
+                <img src="img/logo_anep.svg?2026" class="logo" alt="Logo Anep" />
             </a>            
         </div>
     </nav>
     <!-- navbar end -->
     <!-- page title start -->
-        <div class="container-fluid bg-secondary fondo py-5" style="background-image: url('img/bg/0.png');">
+        <div class="container-fluid fondo py-5" style="background-image: url('img/bg/0.png');">
             <div class="container">
                 <div class="banner-1-top">
                     <div class="row">
                         <div class="col-lg-6 text-center">
                             <h1 class="mb-0"><img src="img/logo_acreditaEMS.png?3" alt="AcreditaEMS" class="img-fluid m-3" /></h1>
-                            <h2>Educación Media Superior</h2>
+                            <h2 class="text-warning">Educación Media Superior</h2>
                             <h3>(Bachillerato)</h4>
                         </div>
                         <div class="col-lg-6 text-center pt-5">
@@ -95,7 +95,7 @@
             </div>
         </div>
         <div class="pb-4 text-center">
-            <img src="img/logo_anep.svg" class="logo mt-3 " alt="Logo Anep" />
+            <img src="img/logo_anep.svg?2026" class="logo mt-3 " alt="Logo Anep" />
         </div>
     </footer>
 
