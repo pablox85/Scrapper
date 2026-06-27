@@ -38,21 +38,24 @@
     <link rel="stylesheet" href="css/responsive.css??20260611">  
 </head>
 <body>
-    <div class="navbar-top navbar-dark pe-3 bg-primary d-lg-block d-none text-white">
-        <div class="container">
-            <div class="row">
-                <div class="col text-lg-end">
-                    <i class="fa fa-phone-alt text-warning"></i> 0800 2637 int. 6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="mailto:acreditaEMS@anep.edu.uy"><i class="fa fa-envelope text-warning"></i> acreditaEMS@anep.edu.uy</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- navbar start -->
     <nav class="navbar navbar-dark navbar-expand-lg bg-primary">
         <div class="container px-0">
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" href="acreditaES.html">
                 <img src="img/logo_anep.svg?2026" class="logo" alt="Logo Anep" />
-            </a>            
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="d-flex">
+                <div class="collapse navbar-collapse" id="navbarNav">
+                                    <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ps-3">
+                        <li class="nav-item">
+                            <a class="nav-link" href="faqsES.html">Preguntas Frecuentes Acredita ES</a>
+                        </li>                        
+                    </ul>
+                </div>
+            </div>
         </div>
     </nav>
     <!-- navbar end -->
@@ -62,8 +65,8 @@
                 <div class="banner-1-top">
                     <div class="row">
                         <div class="col-lg-6 text-center">
-                            <h1 class="mb-0"><img src="img/logo_acreditaEMS.png?3" alt="AcreditaEMS" class="img-fluid m-3" /></h1>
-                            <h2 class="text-warning">Educación Media Superior</h2>
+                            <h1 class="mb-0"><img src="img/AcreditaES2026Logo.svg?4" alt="AcreditaEMS" class="img-fluid m-3" /></h1>
+                            <h2>Educación Media Superior</h2>
                             <h3>(Bachillerato)</h4>
                         </div>
                         <div class="col-lg-6 text-center pt-5">
@@ -81,10 +84,10 @@
         <div class="container ">
             <div class="row">
                 <div class="col-lg-8 text-white ">
-                    Administración Nacional de Educación Pública - ANEP<br />
-                    Consejo Directivo Central - CODICEN<br />
-                    Dirección Sectorial de Planificación Educativa - DSPE<br />
-                    División de Investigación, Evaluación y Estadística - DIEE<br />
+                    Administración Nacional de Educación Pública<br />
+                    Consejo Directivo Central<br />
+                    Dirección Sectorial de Planificación Educativa<br />
+                    División de Investigación, Evaluación y Estadística<br />
                     Departamento de Evaluación de Aprendizajes
                 </div>
                 <div class="col-lg-4 text-lg-end text-white">
@@ -93,9 +96,6 @@
                     <a href="mailto:acreditaEMS@anep.edu.uy"><i class="fa fa-envelope text-warning"></i> acreditaEMS@anep.edu.uy</a>
                 </div>
             </div>
-        </div>
-        <div class="pb-4 text-center">
-            <img src="img/logo_anep.svg?2026" class="logo mt-3 " alt="Logo Anep" />
         </div>
     </footer>
 
