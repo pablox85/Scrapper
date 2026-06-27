@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 
 #forcepush
 
-URL = "https://acredita.anep.edu.uy/acreditaES.html" 
+URL = "https://acredita.anep.edu.uy/acreditaES.html"
 STATE_FILE = Path("page_state.txt")
 TELEGRAM_OFFSET_FILE = Path("telegram_offset.txt")
 TIMEOUT_SECONDS = 20
