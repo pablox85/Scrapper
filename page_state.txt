@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es-uy">
 <head>
-    <meta http-equiv="Expires" content="TUE, 21 APR 2026 16:00:00 GMT">
+    <meta http-equiv="Expires" content="FRI, 09 JUL 2026 16:00:00 GMT">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7RTC8MGHN2"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -32,9 +32,6 @@
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_UY" />
     <meta property="og:site_name" content="Acredita ANEP" />
-
-
-
     <link rel="stylesheet" href="css/responsive.css??20260611">  
 </head>
 <body>
@@ -43,7 +40,7 @@
             <a class="navbar-brand" href="acreditaES.html">
                 <img src="img/logo_anep.svg?2026" class="logo" alt="Logo Anep" />
             </a>
-          <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="d-flex">
@@ -56,7 +53,7 @@
                     </ul>
                 </div>
             </div>
-        </div>-->
+        </div>
     </nav>
     <!-- navbar end -->
     <!-- page title start -->
@@ -65,12 +62,12 @@
                 <div class="banner-1-top">
                     <div class="row">
                         <div class="col-lg-6 text-center">
-                            <h1 class="mb-0"><img src="img/AcreditaES2026Logo.svg?4" alt="AcreditaEMS" class="img-fluid m-3" /></h1>
+                            <h1 class="mb-0"><img src="img/AcreditaES2026Logo.svg?4" alt="AcreditaES" class="img-fluid m-3" /></h1>
                             <h2>Educación Media Superior</h2>
                             <h3>(Bachillerato)</h4>
                         </div>
                         <div class="col-lg-6 text-center pt-5">
-                            <h1>Se anunciará próximamente la fecha de comienzo de Inscripciones.</h1>
+                            <h1>Las inscripciones comienzan el martes 14 de julio.</h1>
                         </div>
                     </div>
                 </div>
