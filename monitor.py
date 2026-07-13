@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 
 URL = "https://acredita.anep.edu.uy/acreditaES.html"
 STATE_FILE = Path("page_state.txt")
+SURVEY_URL = "https://encuestas.anep.edu.uy/limesurvey/index.php/364232?lang=es"
 TELEGRAM_OFFSET_FILE = Path("telegram_offset.txt")
 TIMEOUT_SECONDS = 20
 
@@ -38,6 +39,11 @@ H1 actual:
 URL:
 {url}"""
 
+SURVEY_AVAILABLE_MESSAGE = """🚨 Encuesta de ANEP  disponible.
+
+https://encuestas.anep.edu.uy/limesurvey/index.php/364232?lang=es"""
+SURVEY_UNAVAILABLE_MESSAGE = "No Carga"
+
 FORCED_STATE = b"__forced_acredita_monitor_state_for_integration_test__"
 
 
@@ -61,6 +67,15 @@ def fetch_page() -> tuple[str, bytes]:
         raise MonitorError(f"HTTP no exitoso: {response.status_code}")
 
     return response.text, response.content
+
+
+def survey_loads() -> bool:
+    try:
+        response = requests.get(SURVEY_URL, timeout=TIMEOUT_SECONDS)
+    except requests.RequestException:
+        return False
+
+    return 200 <= response.status_code < 300
 
 
 def parse_page(html: str) -> dict[str, str]:
@@ -208,7 +223,7 @@ def is_test_command(text: str) -> bool:
     return command == "/test" or command.startswith("/test@")
 
 
-def run_check() -> int:
+def run_acredita_check() -> None:
     html_text, html_bytes = fetch_page()
     page = parse_page(html_text)
 
@@ -220,17 +235,32 @@ def run_check() -> int:
     if not STATE_FILE.exists():
         STATE_FILE.write_bytes(html_bytes)
         print(f"Primera ejecución. Estado creado en {STATE_FILE}. No se envía alerta.")
-        return 0
+        return
 
     previous_html = STATE_FILE.read_bytes()
 
     if previous_html == html_bytes:
         print("Sin cambios. No se envía alerta.")
-        return 0
+        return
 
     enviar_telegram(CHANGE_MESSAGE.format(h1=page["h1"], url=URL))
     STATE_FILE.write_bytes(html_bytes)
     print("Cambio detectado. Alerta enviada y estado actualizado.")
+
+
+def run_survey_check() -> None:
+    if survey_loads():
+        enviar_telegram(SURVEY_AVAILABLE_MESSAGE)
+        print("Encuesta de ANEP disponible. Alerta enviada.")
+        return
+
+    enviar_telegram(SURVEY_UNAVAILABLE_MESSAGE)
+    print("Encuesta de ANEP no carga. Alerta enviada.")
+
+
+def run_check() -> int:
+    run_acredita_check()
+    run_survey_check()
     return 0
 
 
