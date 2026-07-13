@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es-uy">
 <head>
-    <meta http-equiv="Expires" content="FRI, 10 JUL 2026 16:00:00 GMT">
+    <meta http-equiv="Expires" content="MON, 13 JUL 2026 22:00:00 GMT">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7RTC8MGHN2"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -67,7 +67,9 @@
                             <h3>(Bachillerato)</h4>
                         </div>
                         <div class="col-lg-6 text-center pt-5">
-                            <h1>Inscripciones desde el martes 14 de julio hasta el miércoles 2 de septiembre.</h1>
+                            <h1>Inscripciones abiertas hasta el miércoles 2 de septiembre 2026.</h1>
+                            <a href="https://encuestas.anep.edu.uy/limesurvey/index.php/364232?lang=es" class="btn btn-primary my-3 btn-lg p-4" target="_blank">Inscribirse </a><br><br>
+                            Para los que aprobaron AcreditaEB (ciclo básico) en ediciones anteriores pueden descargar el certificado desde <a href="https://acredita.anep.edu.uy/resultados.html" target="_blank">aquí</a>.<br />
                         </div>
                     </div>
                 </div>
