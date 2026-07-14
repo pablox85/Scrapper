@@ -13,7 +13,7 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acredita Educación Media Básica</title>
+    <title>AcreditaES</title>
     <link rel="shortcut icon" href="img/favicon.ico" type="image/vnd.microsoft.icon" />
     <meta name="title" content="Acredita EB - Acreditación de Saberes para la Educación Media Superior (Bachillerato)" />
     <meta name="description" content="Acreditación de Saberes para la culminación de la Educación Media Superior en Uruguay (Bachillerato)." />
@@ -48,7 +48,10 @@
                                     <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ps-3">
                         <li class="nav-item">
-                            <a class="nav-link" href="faqsES.html">Preguntas Frecuentes Acredita ES</a>
+                            <a class="nav-link" href="faqsES.html">Preguntas Frecuentes</a>
+                        </li>                        
+                              <li class="nav-item">
+                            <a class="nav-link" href="reglamentoES.html">Reglamento</a>
                         </li>                        
                     </ul>
                 </div>
