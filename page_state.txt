@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es-uy">
 <head>
-    <meta http-equiv="Expires" content="TUE, 14 JUL 2026 19:00:00 GMT">
+    <meta http-equiv="Expires" content="THU, 16 JUL 2026 22:00:00 GMT">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7RTC8MGHN2"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -72,18 +72,13 @@
                         <div class="col-lg-6 text-center pt-5">
                             <h1>Inscripciones abiertas hasta el miércoles 2 de septiembre 2026.</h1>
                             <div class="row">
-                                <div class="col-lg-6">
-                                    <a href="https://encuestas.anep.edu.uy/limesurvey/index.php/364232?lang=es" class="btn btn-primary m-3 btn-lg p-3" target="_blank">Inscribirse </a>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="m-1 bg-warning p-3 rounded">
-                                        
-                                    Por exceso de solicitudes al servidor, el formulario puede volverse lento. Se sugiere armarse de paciencia y probar en otro momento. Hay tiempo hasta el 2 de septiembre.
-                                    </div>
+                                <div class="col">
+                                    <a href="https://encuestas.anep.edu.uy/limesurvey/index.php/364232?lang=es" class="btn btn-primary m-3 btn-lg p-3" target="_blank">Inscribirse </a><br /><br />
+                                Para los que aprobaron AcreditaEB (ciclo básico) en ediciones del 2020 al 2023 pueden descargar el certificado desde <a href="https://acredita.anep.edu.uy/resultados.html" target="_blank">aquí</a>.
                                 </div>
                             </div>
                             </div>
-                             Para los que aprobaron AcreditaEB (ciclo básico) en ediciones del 2020 al 2023 pueden descargar el certificado desde <a href="https://acredita.anep.edu.uy/resultados.html" target="_blank">aquí</a>.<br />
+                            
                         </div>
                     </div>
                 </div>
